@@ -1,0 +1,11 @@
+{
+  "name": "expressing-space-api",
+  "version": "1.0.0",
+  "description": "node api for expressing space app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ilija",
+  "license": "ISC"
+}
