@@ -4,10 +4,10 @@
   "description": "node api for expressing space app",
   "main": "app.ts",
   "scripts": {
-    "compile": "tsc && node app.js",
-    "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
+    "tsc-buiild": "npm run build:live",
+    "dev": "tsc --watch & nodemon dist",
     "test": "jest"
   },
   "jest": {

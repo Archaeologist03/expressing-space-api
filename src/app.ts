@@ -5,12 +5,14 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const a = 22;
+const someData: { x: number; y?: number | string } = {
+  x: 123,
+  y: 'a',
+};
 
 app.get('/', async (req: Request, res: Response) => {
-  res.send({ username: 'x' });
-
-  console.log(123);
+  res.send('hahah');
+  res.json(someData);
 });
 
 app.listen(PORT, () => {
