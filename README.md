@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Expressing-Space(API) 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="#" target="_blank">
+  <a href="https://github.com/Archaeologist03/expressing-space-api/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
@@ -11,14 +11,11 @@
 ## Prerequisites
 
 - You need to have Typescript installed globally to run TS compiler.
-- You will also need node-v12 installed on your machine.
+- You will also need node-v12 installed on your machine. [Installing node guide](https://nodejs.org/en/download/package-manager/)
 
-```
+```sh
 npm install -g typescript
-
 ```
-
-[Installing node](https://nodejs.org/en/download/package-manager/)
 
 ## Install
 
