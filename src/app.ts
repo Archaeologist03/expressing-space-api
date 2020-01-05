@@ -1,20 +1,19 @@
-const express = require('express');
-import { Request, Response } from 'express';
+import express from 'express';
 
+import authRoute from './api/routes/auth';
+
+// Create Express server
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+// Controllers (route handlers)
 
-const someData: { x: number; y?: number | string } = {
-  x: 123,
-  y: 'a',
-};
+// Connect to MongoDB
 
-app.get('/', async (req: Request, res: Response) => {
-  res.send('hahah');
-  res.json(someData);
-});
+// Express configuration
+app.set('port', process.env.PORT || 5000);
+app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port: ${PORT}`);
-});
+// API Routes
+app.use('/auth', authRoute);
+
+export default app;
