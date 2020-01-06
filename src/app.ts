@@ -1,14 +1,13 @@
 import express from 'express';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 
 import { MONGODB_URI } from './utils/secrets';
 
 import authRoute from './api/routes/auth';
+import likesRoute from './api/routes/likes';
 
 // Create Express server
 const app = express();
-
-// Controllers (route handlers)
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
@@ -34,5 +33,6 @@ app.use(express.json());
 
 // API Routes
 app.use('/auth', authRoute);
+app.use('/likes', likesRoute);
 
 export default app;
