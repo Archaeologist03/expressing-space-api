@@ -3,8 +3,13 @@ import mongoose from 'mongoose';
 
 import { MONGODB_URI } from './utils/secrets';
 
+// ROUTES IMPORTS
 import authRoute from './api/routes/auth';
-import likesRoute from './api/routes/likes';
+import booksRoute from './api/routes/likes/books';
+import moviesRoute from './api/routes/likes/movies';
+import tvShowsRoute from './api/routes/likes/tvShows';
+import songsRoute from './api/routes/likes/songs';
+import artistsRoute from './api/routes/likes/artists';
 
 // Create Express server
 const app = express();
@@ -33,6 +38,10 @@ app.use(express.json());
 
 // API Routes
 app.use('/auth', authRoute);
-app.use('/likes', likesRoute);
+app.use('/likes/books', booksRoute);
+app.use('/likes/movies', moviesRoute);
+app.use('/likes/shows', tvShowsRoute);
+app.use('/likes/songs', songsRoute);
+app.use('/likes/artists', artistsRoute);
 
 export default app;
