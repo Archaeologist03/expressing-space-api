@@ -22,6 +22,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
+    dbName: 'expressing-space',
   })
   .then(() => {
     console.log('MongoDB connected..');

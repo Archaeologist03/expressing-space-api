@@ -9,9 +9,16 @@ const artistSchema = new Schema({
   art: {
     type: String,
   },
-  genre: {
+  note: {
     type: String,
   },
+  users: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+  ],
 });
 
 export default mongoose.model('Artist', artistSchema);
