@@ -46,8 +46,3 @@ npm test
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archaeologist03/expressing-space-api/issues). You can also take a look at the [contributing guide](https://github.com/Archaeologist03/expressing-space-api/blob/master/README.md).
 
-## Show your support
-
-Give a ⭐️ if you like project.
-
----
