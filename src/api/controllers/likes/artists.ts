@@ -63,6 +63,8 @@ export const addArtist = async (
   try {
     await artist.save();
 
+    // #TODO: After saving artist, we should add its id to user artists array
+
     res.status(201).json({
       message: 'Artist added successfully.',
       artist: artist,
