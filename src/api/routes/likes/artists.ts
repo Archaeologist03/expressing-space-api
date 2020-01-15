@@ -8,6 +8,6 @@ route.get('/', [], artistsController.getArtists);
 route.get('/:artistId', [], artistsController.getArtist);
 route.post('/', [], artistsController.addArtist);
 route.put('/:artistId', [], artistsController.editArtist);
-route.delete('/', [], artistsController.deleteArtist);
+route.delete('/:artistId', [], artistsController.deleteArtist);
 
 export default route;

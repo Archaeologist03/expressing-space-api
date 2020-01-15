@@ -42,7 +42,7 @@ export const getArtist = async (
   next: NextFunction,
 ) => {
   console.log('getting single getArtist ');
-  res.json({ msg: 'hi from getArtist' });
+  res.json({ msg: 'hi from getArtist', prm: req.params });
 };
 
 // Add a Artist to a collection
@@ -91,5 +91,22 @@ export const deleteArtist = async (
   next: NextFunction,
 ) => {
   console.log('deleting deleteArtist ');
-  res.json({ msg: 'hi from deleteArtist' });
+
+  const artistId = req.params.artistId;
+
+  try {
+    const artist = await Artist.findById(artistId);
+
+    // #TODO: From here we need user to look into his artists
+    // If in his array is artist with this Id, we delete it from there
+    // For now we are going to keep artist in artist array (not users)
+    // But might delete it from artist as well, need to figure logic of checking if any other user has it listed, if not - can delete.
+
+    console.log(artist, artistId);
+  } catch (err) {
+    console.log(err, 'error deleting artist');
+  }
+
+  res.json({ msg: 'hi from del', parms: req.params });
 };
+// 5e1cb099feb25631f4d8f77d
