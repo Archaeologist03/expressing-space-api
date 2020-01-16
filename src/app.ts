@@ -3,8 +3,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+import { I_ErrorObject } from './interfaces/IErrors';
 import { MONGODB_URI } from './utils/secrets';
-import { I_NoPriorRouteError } from './interfaces/IApp';
 
 // ROUTES IMPORTS
 import authRoute from './api/routes/auth';
@@ -54,12 +54,7 @@ app.use('/likes/artists', artistsRoute);
 // If doesnt match any of prior routes
 
 app.use(
-  (
-    error: I_NoPriorRouteError,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  (error: I_ErrorObject, req: Request, res: Response, next: NextFunction) => {
     console.log(error, 'from last resort middleware.. server');
     const status = error.statusCode || 500;
     const { message, data } = error;

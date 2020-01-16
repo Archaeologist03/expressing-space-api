@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { I_ErrorObject } from '../../interfaces/IErrors';
 import { JWT_SECRET } from '../../utils/secrets';
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -8,8 +9,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   // Check if header exists, if not throw err
   const authHeader = req.get('Authorization');
   if (!authHeader) {
-    const error = new Error('Not authenticated');
-    // @ts-ignore
+    const error: I_ErrorObject = new Error('Not authenticated');
     error.statusCode = 401;
     throw error;
   }
@@ -26,8 +26,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
   // if undefined = didnt failed but wasnt able to verify token.
   if (!decodedToken) {
-    const error = new Error('Not authenticated.');
-    // @ts-ignore
+    const error: I_ErrorObject = new Error('Not authenticated.');
     error.statusCode = 401;
     throw error;
   }
