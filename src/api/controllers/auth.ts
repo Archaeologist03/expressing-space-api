@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { validationResult } from 'express-validator';
+
+import User from '../../models/user';
 
 // Singup User
 // Create new user account
@@ -10,9 +14,7 @@ export const signup = async (
 ) => {
   console.log('Signin up, from controller');
 
-  const data: { msg: string } = { msg: 'hey there, youre signing up' };
-
-  res.json(data);
+  res.json({ msg: 'hey there, youre signing up' });
 };
 
 // Login User

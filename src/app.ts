@@ -1,7 +1,10 @@
+import { Request, Response, NextFunction } from 'express';
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 import { MONGODB_URI } from './utils/secrets';
+import { I_NoPriorRouteError } from './interfaces/IApp';
 
 // ROUTES IMPORTS
 import authRoute from './api/routes/auth';
@@ -13,6 +16,10 @@ import artistsRoute from './api/routes/likes/artists';
 
 // Create Express server
 const app = express();
+
+// MIDDLEWARES
+app.use(express.json());
+app.use(cors());
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
@@ -35,7 +42,6 @@ mongoose
 
 // Express configuration
 app.set('port', process.env.PORT || 5000);
-app.use(express.json());
 
 // API Routes
 app.use('/auth', authRoute);
@@ -44,5 +50,21 @@ app.use('/likes/movies', moviesRoute);
 app.use('/likes/shows', tvShowsRoute);
 app.use('/likes/songs', songsRoute);
 app.use('/likes/artists', artistsRoute);
+
+// If doesnt match any of prior routes
+
+app.use(
+  (
+    error: I_NoPriorRouteError,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    console.log(error, 'from last resort middleware.. server');
+    const status = error.statusCode || 500;
+    const { message, data } = error;
+    res.status(status).json({ message, data });
+  },
+);
 
 export default app;
