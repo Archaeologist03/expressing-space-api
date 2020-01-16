@@ -13,9 +13,12 @@ route.post(
       .isEmail()
       .withMessage('Please enter valid email')
       // Check if email exist in DB
-      .custom(async (value, { req }) => {
-        const existingUser = User.findOne({ email: value });
-        return existingUser && Promise.reject('Email address already exists.');
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then((userDoc) => {
+          if (userDoc) {
+            return Promise.reject('Email address already exists.');
+          }
+        });
       })
       .normalizeEmail(),
     body('username')

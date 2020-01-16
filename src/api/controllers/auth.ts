@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt, { hash } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
 import { I_ErrorObject } from '../../interfaces/IErrors';
@@ -13,15 +13,13 @@ export const signup = async (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('Signin up, from controller');
-
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error: I_ErrorObject = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error: I_ErrorObject = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    return next(error);
+  }
 
   const email = req.body.email;
   const username = req.body.username;
@@ -36,7 +34,6 @@ export const signup = async (
     });
 
     const result = await user.save();
-    console.log(result);
     res.status(201).json({ message: 'User created!', userId: result._id });
   } catch (err) {
     if (!err.statusCode) {

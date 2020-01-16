@@ -52,10 +52,11 @@ app.use('/likes/songs', songsRoute);
 app.use('/likes/artists', artistsRoute);
 
 // If doesnt match any of prior routes
-
 app.use(
   (error: I_ErrorObject, req: Request, res: Response, next: NextFunction) => {
-    console.log(error, 'from last resort middleware.. server');
+    console.log(
+      'from last resort middleware.. server - (sending error to client)',
+    );
     const status = error.statusCode || 500;
     const { message, data } = error;
     res.status(status).json({ message, data });
