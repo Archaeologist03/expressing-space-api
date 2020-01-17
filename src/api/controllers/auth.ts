@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
 import { I_ErrorObject } from '../../interfaces/IErrors';
+import { I_UserObject } from '../../interfaces/IUser';
 import { JWT_SECRET } from '../../utils/secrets';
 import User from '../../models/user';
 
@@ -22,9 +23,8 @@ export const signup = async (
     return next(error);
   }
 
-  const email = req.body.email;
-  const username = req.body.username;
-  const password = req.body.password;
+  const { email, username, password } = req.body;
+
   try {
     const hashedPw = await bcrypt.hash(password, 12);
 
@@ -34,11 +34,20 @@ export const signup = async (
       password: hashedPw,
     });
 
-    const addedUser = await user.save();
+    // #TODO: Make interface work with async
+    // @ts-ignore
+    const addedUser: I_UserObject = await user.save();
 
-    const token = jwt.sign({ id: addedUser.id }, JWT_SECRET, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      {
+        email: addedUser.email,
+        userId: addedUser._id.toString(),
+      },
+      JWT_SECRET,
+      {
+        expiresIn: '1h',
+      },
+    );
 
     res
       .status(201)
@@ -58,15 +67,44 @@ export const login = async (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('Login up, from controller');
-  console.log(req.body.data);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error: I_ErrorObject = new Error('Validation failed.');
+    error.statusCode = 401;
+    error.data = errors.array()[0];
 
-  const reqData = req.body.data;
+    return next(error);
+  }
 
-  const data: { msg: string; name: string } = {
-    msg: 'hey there, youre logging in',
-    name: reqData.name,
-  };
+  const { email, password } = req.body;
 
-  res.json(data);
+  try {
+    // #TODO: Make interface work with async
+    // @ts-ignore
+    const user: I_UserObject = await User.findOne({ email });
+
+    const isEqual = await bcrypt.compare(password, user.password);
+
+    if (!isEqual) {
+      const error: I_ErrorObject = new Error('Invalid Credentials');
+      error.statusCode = 401;
+      return next(error);
+    }
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userId: user._id.toString(),
+      },
+      JWT_SECRET,
+      {
+        expiresIn: '1h',
+      },
+    );
+
+    res.status(200).json({ token, userId: user._id.toString() });
+  } catch (err) {
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
+  }
 };

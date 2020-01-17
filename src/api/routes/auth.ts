@@ -32,6 +32,26 @@ route.post(
   authController.signup,
 );
 
-route.post('/login', [], authController.login);
+route.post(
+  '/login',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter valid email')
+      // Check if email exist in DB
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then((userDoc) => {
+          if (!userDoc) {
+            return Promise.reject('Invalid Credentials');
+          }
+        });
+      })
+      .normalizeEmail(),
+    body('password')
+      .trim()
+      .isLength({ min: 5 }),
+  ],
+  authController.login,
+);
 
 export default route;
