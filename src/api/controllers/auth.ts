@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
 import { I_ErrorObject } from '../../interfaces/IErrors';
+import { JWT_SECRET } from '../../utils/secrets';
 import User from '../../models/user';
 
 // Singup User
@@ -33,8 +34,15 @@ export const signup = async (
       password: hashedPw,
     });
 
-    const result = await user.save();
-    res.status(201).json({ message: 'User created!', userId: result._id });
+    const addedUser = await user.save();
+
+    const token = jwt.sign({ id: addedUser.id }, JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res
+      .status(201)
+      .json({ token, message: 'User created!', userId: addedUser._id });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
