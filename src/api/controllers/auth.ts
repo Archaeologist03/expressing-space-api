@@ -8,6 +8,8 @@ import { I_UserObject } from '../../interfaces/IUser';
 import { JWT_SECRET } from '../../utils/secrets';
 import User from '../../models/user';
 
+const JWT_EXPIRE_TIME = '24h';
+
 // Singup User
 // Create new user account
 export const signup = async (
@@ -45,7 +47,7 @@ export const signup = async (
       },
       JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: JWT_EXPIRE_TIME,
       },
     );
 
@@ -98,7 +100,7 @@ export const login = async (
       },
       JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: JWT_EXPIRE_TIME,
       },
     );
 

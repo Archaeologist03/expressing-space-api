@@ -14,38 +14,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  likes: {
-    books: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Book',
-      },
-    ],
-    movies: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Movie',
-      },
-    ],
-    tvShows: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'TvShow',
-      },
-    ],
-    songs: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Song',
-      },
-    ],
-    artists: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Artist',
-      },
-    ],
-  },
 });
 
 export default mongoose.model('User', userSchema);

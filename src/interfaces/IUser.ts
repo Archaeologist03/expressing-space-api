@@ -3,5 +3,4 @@ export interface I_UserObject {
   email: string;
   username: string;
   password: string;
-  likes: {};
 }

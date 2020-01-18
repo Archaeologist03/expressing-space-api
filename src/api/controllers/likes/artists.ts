@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Artist from '../../../models/likes/artist';
+import User from '../../../models/user';
 
 // Get all Artists from current user
 export const getArtists = async (
@@ -51,13 +52,23 @@ export const addArtist = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { name, art, note } = req.body;
+  // @ts-ignore
+  const { userId } = req;
+  const { name } = req.body;
+
+  const findArtistInDb = await Artist.findOne({ name });
+  // If artist exist in db, just add current user id if it's not there
+  if (findArtistInDb) {
+    const user = await User.findById(userId);
+    const usersList = findArtistInDb.get('users');
+
+    console.log(usersList);
+    console.log(usersList[0]);
+  }
 
   const artist = new Artist({
     name,
-    art,
-    note,
-    // user: req.userId,  #TODO: add artist id who created this artist
+    users: userId, //#TODO: add artist id who created this artist
   });
 
   try {
@@ -65,10 +76,10 @@ export const addArtist = async (
 
     // #TODO: After saving artist, we should add its id to user artists array
 
-    res.status(201).json({
-      message: 'Artist added successfully.',
-      artist: artist,
-    });
+    // res.status(201).json({
+    //   message: 'Artist added successfully.',
+    //   artist: artist,
+    // });
   } catch (err) {
     console.log(err, 'err adding artist');
   }

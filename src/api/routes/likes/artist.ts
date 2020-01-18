@@ -5,9 +5,9 @@ import isAuth from '../../middlewares/isAuth';
 
 const route = Router();
 
-route.get('/', isAuth, [], artistsController.getArtists);
+route.get('/', [], artistsController.getArtists);
 route.get('/:artistId', [], artistsController.getArtist);
-route.post('/', [], artistsController.addArtist);
+route.post('/', isAuth, [], artistsController.addArtist);
 route.put('/:artistId', [], artistsController.editArtist);
 route.delete('/:artistId', [], artistsController.deleteArtist);
 

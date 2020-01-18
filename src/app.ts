@@ -12,7 +12,7 @@ import booksRoute from './api/routes/likes/books';
 import moviesRoute from './api/routes/likes/movies';
 import tvShowsRoute from './api/routes/likes/tvShows';
 import songsRoute from './api/routes/likes/songs';
-import artistsRoute from './api/routes/likes/artists';
+import artistsRoute from './api/routes/likes/artist';
 
 // Create Express server
 const app = express();

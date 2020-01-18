@@ -12,5 +12,4 @@
 
 
 !!! === Decision === !!!
-- 2. option, likes IDs going into users array with all likes IDs.
-- And for now we are going to skip edit.
+- 1. option - users Ids going into each like users array  
