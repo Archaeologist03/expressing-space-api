@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+import { I_Artist } from '../../interfaces/IArtist';
+
 const artistchema = new Schema({
   name: {
     type: String,
@@ -15,4 +17,7 @@ const artistchema = new Schema({
   ],
 });
 
-export default mongoose.model('Artist', artistchema);
+export default mongoose.model<I_Artist & mongoose.Document>(
+  'Artist',
+  artistchema,
+);

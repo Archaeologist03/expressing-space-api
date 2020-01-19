@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import { validationResult } from 'express-validator';
+
 import Artist from '../../../models/likes/artist';
 import User from '../../../models/user';
+import { I_ErrorObject } from '../../../interfaces/IErrors';
+import { I_Artist } from '../../../interfaces/IArtist';
 
 // Get all Artists from current user
 export const getArtists = async (
@@ -46,42 +50,64 @@ export const getArtist = async (
   res.json({ msg: 'hi from getArtist', prm: req.params });
 };
 
-// Add a Artist to a collection
+// -------------------------------------------------------
+// @PUT /likes/artists/
+// Protected
+// ADD NEW ARTIST OR UPDATE USERS FIELD IN EXISTING ARTIST
 export const addArtist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error: I_ErrorObject = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array()[0];
+    return next(error);
+  }
+
   // @ts-ignore
   const { userId } = req;
   const { name } = req.body;
 
+  // ==== If artist exist in db ====
   const findArtistInDb = await Artist.findOne({ name });
-  // If artist exist in db, just add current user id if it's not there
   if (findArtistInDb) {
-    const user = await User.findById(userId);
-    const usersList = findArtistInDb.get('users');
+    const usersList = await findArtistInDb.get('users');
+    const doesUserExist = usersList.includes(userId.toString());
 
-    console.log(usersList);
-    console.log(usersList[0]);
+    //  If userId exists in users array
+    if (doesUserExist) {
+      const error: I_ErrorObject = new Error(
+        'This user ID already exists in this artist users.',
+      );
+      error.statusCode = 409;
+      return next(error);
+    }
+    // Artist exists but current user ID is not there - user didnt added this artist yet
+    else {
+      const x = await Artist.updateOne(
+        { name },
+        { $push: { users: { _id: userId } } },
+      );
+    }
   }
 
   const artist = new Artist({
     name,
-    users: userId, //#TODO: add artist id who created this artist
+    users: [userId],
   });
 
   try {
-    await artist.save();
-
-    // #TODO: After saving artist, we should add its id to user artists array
-
-    // res.status(201).json({
-    //   message: 'Artist added successfully.',
-    //   artist: artist,
-    // });
+    const addedArtist = await (await artist.save()).toObject();
+    res.status(201).json({
+      message: 'Artist added successfully.',
+      artist: { name: addedArtist.name, _id: addedArtist._id },
+    });
   } catch (err) {
-    console.log(err, 'err adding artist');
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
   }
 };
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 import { I_ErrorObject } from '../../interfaces/IErrors';
 import { JWT_SECRET } from '../../utils/secrets';
@@ -29,9 +30,19 @@ export default (req: Request, res: Response, next: NextFunction) => {
     throw error;
   }
 
-  // add user to payload to every request/route that uses this middleware
   // @ts-ignore
-  req.userId = decodedToken.userId;
+  const isUserIdValid = mongoose.Types.ObjectId.isValid(decodedToken.userId);
+
+  if (isUserIdValid) {
+    // add user to payload to every request/route that uses this middleware
+    // @ts-ignore
+    req.userId = decodedToken.userId;
+  } else {
+    const error: I_ErrorObject = new Error('Not authenticated.');
+
+    error.statusCode = 401;
+    throw error;
+  }
 
   next();
 };
