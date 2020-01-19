@@ -74,8 +74,9 @@ export const addArtist = async (
   const { userId } = req;
   const { name } = req.body;
 
-  // ==== If artist exist in db ====
   const findArtistInDb = await Artist.findOne({ name });
+
+  // ==== If artist exist in db ====
   if (findArtistInDb) {
     const usersList = await findArtistInDb.get('users');
     const doesUserExist = usersList.includes(userId.toString());
@@ -90,10 +91,16 @@ export const addArtist = async (
     }
     // Artist exists but current user ID is not there - user didnt added this artist yet
     else {
-      const x = await Artist.updateOne(
+      const addedArtist = await Artist.findOneAndUpdate(
         { name },
         { $push: { users: { _id: userId } } },
+        { new: true },
       );
+
+      return res.status(201).json({
+        message: 'UserId added to Artist successfully.',
+        artist: { name: addedArtist.name, _id: addedArtist._id },
+      });
     }
   }
 
@@ -102,9 +109,10 @@ export const addArtist = async (
     users: [userId],
   });
 
+  // ==== artist doesn't exist in db ====
   try {
     const addedArtist = await (await artist.save()).toObject();
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Artist added successfully.',
       artist: { name: addedArtist.name, _id: addedArtist._id },
     });
@@ -125,29 +133,50 @@ export const editArtist = async (
   res.json({ msg: 'hi from editArtist' });
 };
 
-// Delete Artist
+// -------------------------------------------------------
+// @DELETE /likes/artists/:artistId
+// Protected
+// DELETE CURRENT USER ID FROM SELECTED ARTIST - IF USERS ARRAY EMPTY = DELETE WHOLE ARTIST FROM DB
 export const deleteArtist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('deleting deleteArtist ');
-
+  // @ts-ignore
+  const { userId } = req;
   const artistId = req.params.artistId;
 
   try {
-    const artist = await Artist.findById(artistId);
+    const findArtistInDb = await Artist.findById(artistId);
 
-    // #TODO: From here we need user to look into his artists
-    // If in his array is artist with this Id, we delete it from there
-    // For now we are going to keep artist in artist array (not users)
-    // But might delete it from artist as well, need to figure logic of checking if any other user has it listed, if not - can delete.
+    // ==== If artist exist in db ====
+    if (findArtistInDb) {
+      const usersList = await findArtistInDb.get('users');
+      const doesUserExist = usersList.includes(userId.toString());
 
-    console.log(artist, artistId);
+      //  If userId doesn't exist in artist
+      if (!doesUserExist) {
+        const error: I_ErrorObject = new Error(
+          "This user ID doesn't exist on this artist. ",
+        );
+        error.statusCode = 404;
+        return next(error);
+      } else {
+        // Deleting userId from artist
+        await Artist.updateOne(
+          { _id: artistId },
+          { $pull: { users: { _id: userId } } },
+        );
+        res.json({ msg: 'UserId deleted from artist', parms: req.params });
+      }
+    }
+
+    // #TODO: IF users array is empty - delete artist from db
+    const artist = Artist.findById(userId);
+
+    console.log(findArtistInDb, artistId, artist);
   } catch (err) {
-    console.log(err, 'error deleting artist');
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
   }
-
-  res.json({ msg: 'hi from del', parms: req.params });
 };
-// 5e1cb099feb25631f4d8f77d

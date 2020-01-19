@@ -21,6 +21,6 @@ route.put(
   artistsController.addArtist,
 );
 route.put('/:artistId', [], artistsController.editArtist);
-route.delete('/:artistId', [], artistsController.deleteArtist);
+route.delete('/:artistId', isAuth, [], artistsController.deleteArtist);
 
 export default route;
