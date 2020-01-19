@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
 import Artist from '../../../models/likes/artist';
-import User from '../../../models/user';
 import { I_ErrorObject } from '../../../interfaces/IErrors';
-import { I_Artist } from '../../../interfaces/IArtist';
 
-// Get all Artists from current user
+// -------------------------------------------------------
+// @GET /likes/artists/
+// Protected
+// GET ARTISTS FROM CURRENT USER
 export const getArtists = async (
   req: Request,
   res: Response,
@@ -16,27 +17,29 @@ export const getArtists = async (
   const perPage = 2;
 
   try {
-    const userId = '5e14d89b1c9d440000c6fbb3'; //# it should come from user model (when setup auth middleware) - to find artist that this specific user added
+    // @ts-ignore
+    const userId = req.userId;
     const totalItems = await Artist.find({
-      users: { $elemMatch: { _id: userId } },
+      users: { _id: userId },
     }).countDocuments();
 
-    // Grab artists from specified(current) user, excluding users(who also added it) array
+    // Find only ones that has current user id
     const artists = await Artist.find({
-      users: { $elemMatch: { _id: userId } },
+      users: { _id: userId },
     })
-      .populate('user')
       .skip((currentPage - 1) * perPage)
       .limit(perPage)
       .select('-users');
 
     res.status(200).json({
-      message: 'Fetched current user Arrists.',
+      message: 'Fetched current user Artists.',
+      userId,
       artists,
       totalItems,
     });
   } catch (err) {
-    console.log(err, '500 from get artists');
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
   }
 };
 
@@ -112,6 +115,7 @@ export const addArtist = async (
 };
 
 // Edit/update/rename a Artist instance
+// ####Might not need - it might be better if user could just delete misstyped like and add new
 export const editArtist = async (
   req: Request,
   res: Response,

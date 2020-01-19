@@ -7,7 +7,7 @@ import isAuth from '../../middlewares/isAuth';
 
 const route = Router();
 
-route.get('/', [], artistsController.getArtists);
+route.get('/', isAuth, [], artistsController.getArtists);
 route.get('/:artistId', [], artistsController.getArtist);
 route.put(
   '/',
