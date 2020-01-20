@@ -159,22 +159,28 @@ export const deleteArtist = async (
         const error: I_ErrorObject = new Error(
           "This user ID doesn't exist on this artist. ",
         );
+
         error.statusCode = 404;
         return next(error);
       } else {
         // Deleting userId from artist
-        await Artist.updateOne(
-          { _id: artistId },
-          { $pull: { users: { _id: userId } } },
+        const artistAfterDeletion = await Artist.findByIdAndUpdate(
+          artistId,
+          { $pull: { users: userId } },
+          { new: true },
         );
-        res.json({ msg: 'UserId deleted from artist', parms: req.params });
+
+        // If users array is empty - delete artist from db
+        if (!artistAfterDeletion.users[0]) {
+          await Artist.findByIdAndDelete(artistId);
+        }
+
+        return res.json({
+          msg: 'UserId deleted from artist',
+          artistId: artistId,
+        });
       }
     }
-
-    // #TODO: IF users array is empty - delete artist from db
-    const artist = Artist.findById(userId);
-
-    console.log(findArtistInDb, artistId, artist);
   } catch (err) {
     if (!err.statusCode) err.statusCode = 500;
     next(err);
