@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 
-import * as artistsController from '../../controllers/likes/artists';
-import Artist from '../../../models/likes/artist';
+import * as artistsController from '../../controllers/likes/artist';
 import isAuth from '../../middlewares/isAuth';
 
 const route = Router();

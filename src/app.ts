@@ -33,7 +33,7 @@ mongoose
     dbName: 'expressing-space',
   })
   .then(() => {
-    console.log('MongoDB connected..');
+    // console.log('MongoDB connected..');
   })
   .catch((err) => {
     console.log(
