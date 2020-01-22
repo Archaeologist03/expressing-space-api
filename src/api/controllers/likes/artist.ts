@@ -50,7 +50,7 @@ export const getArtist = async (
   next: NextFunction,
 ) => {
   console.log('getting single getArtist ');
-  res.json({ msg: 'hi from getArtist', prm: req.params });
+  res.json({ message: 'hi from getArtist', prm: req.params });
 };
 
 // -------------------------------------------------------
@@ -130,7 +130,7 @@ export const editArtist = async (
   next: NextFunction,
 ) => {
   console.log('updating editArtist ');
-  res.json({ msg: 'hi from editArtist' });
+  res.json({ message: 'hi from editArtist' });
 };
 
 // -------------------------------------------------------
@@ -175,8 +175,8 @@ export const deleteArtist = async (
           await Artist.findByIdAndDelete(artistId);
         }
 
-        return res.json({
-          msg: 'UserId deleted from artist',
+        return res.status(202).json({
+          message: 'UserId deleted from artist',
           artistId: artistId,
         });
       }
