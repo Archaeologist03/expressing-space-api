@@ -36,6 +36,9 @@ mongoose
     // console.log('MongoDB connected..');
   })
   .catch((err) => {
+    console.log(mongoUrl);
+    console.log(err);
+
     console.log(
       'MongoDB connection error. Please make sure MongoDB is running. ' + err,
     );
