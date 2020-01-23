@@ -24,8 +24,6 @@ app.use(cors());
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
-console.log('stuff stufff', MONGODB_URI);
-
 mongoose
   .connect(mongoUrl, {
     useNewUrlParser: true,
@@ -38,9 +36,6 @@ mongoose
     // console.log('MongoDB connected..');
   })
   .catch((err) => {
-    console.log(mongoUrl);
-    console.log(err);
-
     console.log(
       'MongoDB connection error. Please make sure MongoDB is running. ' + err,
     );
