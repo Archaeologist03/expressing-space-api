@@ -24,6 +24,8 @@ app.use(cors());
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
+console.log('stuff stufff', MONGODB_URI);
+
 mongoose
   .connect(mongoUrl, {
     useNewUrlParser: true,
