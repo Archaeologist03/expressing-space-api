@@ -11,7 +11,7 @@ import authRoute from './api/routes/auth';
 import booksRoute from './api/routes/likes/book';
 import moviesRoute from './api/routes/likes/movies';
 import tvShowsRoute from './api/routes/likes/tvShows';
-import songsRoute from './api/routes/likes/songs';
+import songsRoute from './api/routes/likes/song';
 import artistsRoute from './api/routes/likes/artist';
 
 // Create Express server

@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+import { I_Song } from '../../interfaces/I_Song';
+
 const songSchema = new Schema({
   title: {
     type: String,
@@ -10,9 +12,13 @@ const songSchema = new Schema({
     type: String,
     required: true,
   },
-  genre: {
-    type: String,
-  },
+  users: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+  ],
 });
 
-export default mongoose.model('Song', songSchema);
+export default mongoose.model<I_Song & mongoose.Document>('Song', songSchema);

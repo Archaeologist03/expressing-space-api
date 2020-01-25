@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 
-import Book from '../../../models/likes/book';
+import Song from '../../../models/likes/song';
 import { I_ErrorObject } from '../../../interfaces/IErrors';
 
 // -------------------------------------------------------
-// @GET /likes/books/
+// @GET /likes/songs/
 // Protected
-// GET BOOKS FROM CURRENT USER
-export const getBooks = async (
+// GET SONGS FROM CURRENT USER
+export const getSongs = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -19,12 +19,12 @@ export const getBooks = async (
   try {
     // @ts-ignore
     const userId = req.userId;
-    const totalItems = await Book.find({
+    const totalItems = await Song.find({
       users: { _id: userId },
     }).countDocuments();
 
     // Find only ones that has current user id
-    const books = await Book.find({
+    const songs = await Song.find({
       users: { _id: userId },
     })
       .skip((currentPage - 1) * perPage)
@@ -32,9 +32,9 @@ export const getBooks = async (
       .select('-users');
 
     return res.status(200).json({
-      message: 'Fetched current user Books.',
+      message: 'Fetched current user Songs.',
       userId,
-      books,
+      songs,
       totalItems,
     });
   } catch (err) {
@@ -43,21 +43,21 @@ export const getBooks = async (
   }
 };
 
-// Get single book  ####Might not need
-export const getBook = async (
+// Get single Song  ####Might not need
+export const getSong = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('getting single getBook ');
-  res.json({ msg: 'hi from getBook' });
+  console.log('getting single getSong ');
+  res.json({ msg: 'hi from getSong' });
 };
 
 // -------------------------------------------------------
-// @PUT /likes/books/
+// @PUT /likes/songs/
 // Protected
-// ADD NEW BOOK OR UPDATE USERS FIELD IN EXISTING BOOK
-export const addBook = async (
+// ADD NEW SONG OR UPDATE USERS FIELD IN EXISTING SONG
+export const addSong = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -72,56 +72,56 @@ export const addBook = async (
 
   // @ts-ignore
   const { userId } = req;
-  const { title, author } = req.body;
+  const { title, artist } = req.body;
 
-  const findBookInDb = await Book.findOne({ title, author });
+  const findSongInDb = await Song.findOne({ title, artist });
 
-  // ==== If book exist in db ====
-  if (findBookInDb) {
-    const usersList = await findBookInDb.get('users');
+  // ==== If song exist in db ====
+  if (findSongInDb) {
+    const usersList = await findSongInDb.get('users');
     const doesUserExist = usersList.includes(userId.toString());
 
     //  If userId exists in users array
     if (doesUserExist) {
-      const error: I_ErrorObject = new Error('You already added this book.');
+      const error: I_ErrorObject = new Error('You already added this song.');
       error.statusCode = 409;
       return next(error);
     }
-    // Book exists but current user ID is not there - user didnt added this book yet
+    // Song exists but current user ID is not there - user didnt added this song yet
     else {
-      const addedBook = await Book.findOneAndUpdate(
-        { title, author },
+      const addedSong = await Song.findOneAndUpdate(
+        { title, artist },
         { $push: { users: { _id: userId } } },
         { new: true },
       );
 
       return res.status(201).json({
-        message: 'Book added successfully.',
-        book: {
-          title: addedBook.title,
+        message: 'Song added successfully.',
+        song: {
+          title: addedSong.title,
           // @ts-ignore
-          author: addBook.author,
-          _id: addedBook._id,
+          author: addSong.artist,
+          _id: addedSong._id,
         },
       });
     }
   }
 
-  const newBook = new Book({
+  const newSong = new Song({
     title,
-    author,
+    artist,
     users: [userId],
   });
 
-  // ==== Book doesn't exist in db ====
+  // ==== Song doesn't exist in db ====
   try {
-    const addedBook = await (await newBook.save()).toObject();
+    const addedSong = await (await newSong.save()).toObject();
     return res.status(201).json({
-      message: 'Book added successfully.',
-      book: {
-        title: addedBook.title,
-        author: addedBook.author,
-        _id: addedBook._id,
+      message: 'Song added successfully.',
+      song: {
+        title: addedSong.title,
+        artist: addedSong.artist,
+        _id: addedSong._id,
       },
     });
   } catch (err) {
@@ -130,65 +130,65 @@ export const addBook = async (
   }
 };
 
-// Edit/update/rename a book instance
-export const editBook = async (
+// Edit/update/rename a Song instance
+export const editSong = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('updating editBook ');
-  res.json({ msg: 'hi from editBook' });
+  console.log('updating editSong ');
+  res.json({ msg: 'hi from editSong' });
 };
 
 // -------------------------------------------------------
-// @DELETE /likes/books/:bookId
+// @DELETE /likes/songs/:songId
 // Protected
-// DELETE CURRENT USER ID FROM SELECTED BOOK - IF USERS ARRAY EMPTY = DELETE WHOLE BOOK FROM DB
-export const deleteBook = async (
+// DELETE CURRENT USER ID FROM SELECTED SONG - IF USERS ARRAY EMPTY = DELETE WHOLE SONG FROM DB
+export const deleteSong = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   // @ts-ignore
   const { userId } = req;
-  const bookId = req.params.bookId;
+  const songId = req.params.songId;
 
   try {
-    const findBookInDb = await Book.findById(bookId);
+    const findSongInDb = await Song.findById(songId);
 
-    // ==== If book exist in db ====
-    if (findBookInDb) {
-      const usersList = await findBookInDb.get('users');
+    // ==== If song exist in db ====
+    if (findSongInDb) {
+      const usersList = await findSongInDb.get('users');
       const doesUserExist = usersList.includes(userId.toString());
 
-      //  If userId doesn't exist in book
+      //  If userId doesn't exist in song
       if (!doesUserExist) {
         const error: I_ErrorObject = new Error(
-          "This user ID doesn't exist on this book. ",
+          "This user ID doesn't exist on this song. ",
         );
         error.statusCode = 404;
         return next(error);
       } else {
-        // Deleting userId from book
-        const bookAfterDeletion = await Book.findByIdAndUpdate(
-          bookId,
+        // Deleting userId from song
+        const songAfterDeletion = await Song.findByIdAndUpdate(
+          songId,
           { $pull: { users: userId } },
           { new: true },
         );
 
-        // If users array is empty - delete book from db
-        if (!bookAfterDeletion.users[0]) {
-          await Book.findByIdAndDelete(bookId);
+        // If users array is empty - delete song from db
+        if (!songAfterDeletion.users[0]) {
+          await Song.findByIdAndDelete(songId);
         }
 
         return res.status(202).json({
-          message: 'Book deleted successfuly.',
-          bookId,
+          message: 'Song deleted successfuly.',
+          songId,
         });
       }
-      // Book doesn't exist in db
+      // Song doesn't exist in db
     } else {
-      const error: I_ErrorObject = new Error("This book doesn't exist.");
+      const error: I_ErrorObject = new Error("This song doesn't exist.");
       error.statusCode = 404;
       return next(error);
     }

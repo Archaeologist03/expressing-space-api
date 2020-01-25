@@ -31,7 +31,7 @@ export const getArtists = async (
       .limit(perPage)
       .select('-users');
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Fetched current user Artists.',
       userId,
       artists,
@@ -39,7 +39,7 @@ export const getArtists = async (
     });
   } catch (err) {
     if (!err.statusCode) err.statusCode = 500;
-    next(err);
+    return next(err);
   }
 };
 
@@ -83,9 +83,7 @@ export const addArtist = async (
 
     //  If userId exists in users array
     if (doesUserExist) {
-      const error: I_ErrorObject = new Error(
-        'This user ID already exists in this artist users.',
-      );
+      const error: I_ErrorObject = new Error('You already added this artist.');
       error.statusCode = 409;
       return next(error);
     }
@@ -118,7 +116,7 @@ export const addArtist = async (
     });
   } catch (err) {
     if (!err.statusCode) err.statusCode = 500;
-    next(err);
+    return next(err);
   }
 };
 
