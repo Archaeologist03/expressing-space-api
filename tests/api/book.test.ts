@@ -1,11 +1,13 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
-import app from '../src/app';
+import app from '../../src/app';
+import Book from '../../src/models/likes/book';
 
 let token: string = '';
 const email = 'x@x.com';
 const password = '12345';
 
+// Login before tests - get token
 beforeAll((done) => {
   request(app)
     .post('/auth/login')
@@ -25,11 +27,11 @@ afterAll((done) => {
   done();
 });
 
-describe('GET /likes/artists/', () => {
+describe('GET /likes/books/', () => {
   // token not being sent - should respond with a 401
   it('should return require authorization - return 401', async (done) => {
     const res = await request(app)
-      .get('/likes/artists/')
+      .get('/likes/books/')
       .set('Content-Type', 'application/json');
     expect(res.status).toBe(401);
     done();
@@ -38,7 +40,7 @@ describe('GET /likes/artists/', () => {
   // send the token - should respond with a 200
   it('should respond with JSON data - 200', async (done) => {
     const res = await request(app)
-      .get('/likes/artists/')
+      .get('/likes/books/')
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json');
     expect(res.status).toBe(200);
@@ -47,47 +49,54 @@ describe('GET /likes/artists/', () => {
   });
 });
 
-describe('PUT /likes/artists/', () => {
+describe('PUT /likes/books/', () => {
   it('should return require authorization - return 401', async (done) => {
     const res = await request(app)
-      .put('/likes/artists')
+      .put('/likes/books')
       .set('Content-Type', 'application/json');
     expect(res.status).toBe(401);
     done();
   });
 
   // #Todo: There is probalby better way to go about this. Re-check it!
-  it('should return json data with either name prop for success or message prop for err', async (done) => {
-    const name = 'dmx';
+  it('should return json data with either title and author props and same title as sent for success or message prop for err', async (done) => {
+    const title = 'Demons';
+    const author = 'Fyodor Dostoevsky';
     const res = await request(app)
-      .put('/likes/artists')
+      .put('/likes/books')
       .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json')
-      .send({ name });
+      .send({ title, author });
 
     if (res.status === 409) {
       expect(res.status).toBe(409);
       expect(res.body).toHaveProperty('message');
     } else if (res.status === 201) {
       expect(res.status).toBe(201);
-      expect(res.body.artist).toHaveProperty('name');
+      expect(res.body.book).toHaveProperty('title');
+      expect(res.body.book).toHaveProperty('author');
+      expect(res.body.book.title).toBe(title);
     }
     done();
   });
 });
 
 // #Todo: There is probalby better way to go about this. Re-check it!
-describe('DELETE /likes/artists/:artistId', () => {
-  const artistId = '5e24d7350b68952acdcafc2e';
+describe('DELETE /likes/books/:bookId', () => {
+  const title = 'Demons';
+  const author = 'Fyodor Dostoevsky';
+
   it('should return require authorization - return 401', async (done) => {
-    const res = await request(app).delete(`/likes/artists/${artistId}`);
+    const bookId = await (await Book.findOne({ title, author }))._id;
+    const res = await request(app).delete(`/likes/books/${bookId}`);
     expect(res.status).toBe(401);
     done();
   });
 
-  it('should delete userId from artist if it exists or return 404 if not', async (done) => {
+  it('should delete userId from book if it exists or return 404 if not', async (done) => {
+    const bookId = await (await Book.findOne({ title, author }))._id;
     const res = await request(app)
-      .delete(`/likes/artists/${artistId}`)
+      .delete(`/likes/books/${bookId}`)
       .set('Authorization', `Bearer ${token}`);
 
     if (res.status === 404) {
