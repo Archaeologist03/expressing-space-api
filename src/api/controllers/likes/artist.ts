@@ -180,9 +180,14 @@ export const deleteArtist = async (
           artistId: artistId,
         });
       }
+      // artist doesn't exist in db
+    } else {
+      const error: I_ErrorObject = new Error("This artist doesn't exist.");
+      error.statusCode = 404;
+      return next(error);
     }
   } catch (err) {
     if (!err.statusCode) err.statusCode = 500;
-    next(err);
+    return next(err);
   }
 };
