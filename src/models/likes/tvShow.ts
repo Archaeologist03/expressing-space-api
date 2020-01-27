@@ -1,17 +1,23 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+import { I_TvShow } from '../../interfaces/I_TvShow';
+
 const tvShowSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  director: {
-    type: String,
-  },
-  genre: {
-    type: String,
-  },
+  users: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+  ],
 });
 
-export default mongoose.model('TvShow', tvShowSchema);
+export default mongoose.model<I_TvShow & mongoose.Document>(
+  'TvShow',
+  tvShowSchema,
+);

@@ -10,7 +10,7 @@ import { MONGODB_URI } from './utils/secrets';
 import authRoute from './api/routes/auth';
 import booksRoute from './api/routes/likes/book';
 import moviesRoute from './api/routes/likes/movie';
-import tvShowsRoute from './api/routes/likes/tvShows';
+import tvShowsRoute from './api/routes/likes/tvShow';
 import songsRoute from './api/routes/likes/song';
 import artistsRoute from './api/routes/likes/artist';
 
