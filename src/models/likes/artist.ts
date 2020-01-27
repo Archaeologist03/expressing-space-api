@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-import { I_Artist } from '../../interfaces/IArtist';
+import { I_Artist } from '../../interfaces/I_Artist';
 
 const artistchema = new Schema({
   name: {
