@@ -48,7 +48,7 @@ app.set('port', process.env.PORT || 5000);
 app.use('/auth', authRoute);
 app.use('/likes/books', booksRoute);
 app.use('/likes/movies', moviesRoute);
-app.use('/likes/shows', tvShowsRoute);
+app.use('/likes/tvShows', tvShowsRoute);
 app.use('/likes/songs', songsRoute);
 app.use('/likes/artists', artistsRoute);
 

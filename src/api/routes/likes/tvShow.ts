@@ -7,7 +7,7 @@ import isAuth from '../../middlewares/isAuth';
 const route = Router();
 
 route.get('/', isAuth, [], tvShowsController.getTvShows);
-route.get('/:showId', isAuth, [], tvShowsController.getTvShow);
+route.get('/:tvShowId', isAuth, [], tvShowsController.getTvShow);
 route.put(
   '/',
   isAuth,
@@ -20,7 +20,7 @@ route.put(
   ],
   tvShowsController.addTvShow,
 );
-route.put('/:showId', isAuth, [], tvShowsController.editTvShow);
-route.delete('/', isAuth, [], tvShowsController.deleteTvShow);
+route.put('/:tvShowId', isAuth, [], tvShowsController.editTvShow);
+route.delete('/:tvShowId', isAuth, [], tvShowsController.deleteTvShow);
 
 export default route;
