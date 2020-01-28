@@ -8,7 +8,7 @@ import { I_UserObject } from '../../interfaces/IUser';
 import { JWT_SECRET } from '../../utils/secrets';
 import User from '../../models/user';
 
-const JWT_EXPIRE_TIME = '24h';
+const JWT_EXPIRE_TIME = '72h';
 
 // Singup User
 // Create new user account

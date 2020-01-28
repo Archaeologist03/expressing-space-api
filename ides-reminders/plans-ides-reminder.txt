@@ -1,0 +1,10 @@
+- User is able to Add profile picture
+- User is able to write description
+- User is able to add nickname (nickname should be editable)
+- User should be asked to add info such as (age, gender, language, country..)
+
+- (Figure how to make search other users - match functionality)
+
+- Add Messages, place where messages are stored (figure how to connect each message with users from whom msg came from.)
+- Add Real-time conversation with socket 
+- Add letter feel conversation - user can send message that would arrive depending on time how far two users are (location).
