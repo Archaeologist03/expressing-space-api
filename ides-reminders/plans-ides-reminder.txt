@@ -8,3 +8,7 @@
 - Add Messages, place where messages are stored (figure how to connect each message with users from whom msg came from.)
 - Add Real-time conversation with socket 
 - Add letter feel conversation - user can send message that would arrive depending on time how far two users are (location).
+
+
+-- FAV users
+- User is able to add other users to list of favorites or something of that sort.
