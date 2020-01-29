@@ -45,13 +45,16 @@ mongoose
 app.set('port', process.env.PORT || 5000);
 
 // API Routes
+
 app.use('/auth', authRoute);
 app.use('/likes/books', booksRoute);
 app.use('/likes/movies', moviesRoute);
 app.use('/likes/tvShows', tvShowsRoute);
 app.use('/likes/songs', songsRoute);
 app.use('/likes/artists', artistsRoute);
-
+app.use('/', (req, res, next) => {
+  res.send('Hello there, this is root.');
+});
 // If doesnt match any of prior routes
 app.use(
   (error: I_ErrorObject, req: Request, res: Response, next: NextFunction) => {
