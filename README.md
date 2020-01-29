@@ -32,7 +32,7 @@ npm run watch
 ## Run tests
 
 ```sh
-npm test
+npm run watch-test
 ```
 
 ## Author
@@ -45,4 +45,3 @@ npm test
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Archaeologist03/expressing-space-api/issues). You can also take a look at the [contributing guide](https://github.com/Archaeologist03/expressing-space-api/blob/master/README.md).
-
