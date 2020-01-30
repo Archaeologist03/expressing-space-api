@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+import { I_User } from '../interfaces/I_User';
+
 const userSchema = new Schema({
   email: {
     type: String,
@@ -16,4 +18,4 @@ const userSchema = new Schema({
   },
 });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model<I_User & mongoose.Document>('User', userSchema);

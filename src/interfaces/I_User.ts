@@ -1,4 +1,4 @@
-export interface I_UserObject {
+export interface I_User {
   _id: string | object;
   email: string;
   username: string;

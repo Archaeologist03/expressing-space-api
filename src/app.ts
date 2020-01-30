@@ -8,6 +8,7 @@ import { MONGODB_URI } from './utils/secrets';
 
 // ROUTES IMPORTS
 import authRoute from './api/routes/auth';
+import profileRoute from './api/routes/profile';
 import booksRoute from './api/routes/likes/book';
 import moviesRoute from './api/routes/likes/movie';
 import tvShowsRoute from './api/routes/likes/tvShow';
@@ -47,6 +48,7 @@ app.set('port', process.env.PORT || 5000);
 // API Routes
 
 app.use('/auth', authRoute);
+app.use('/profile', profileRoute);
 app.use('/likes/books', booksRoute);
 app.use('/likes/movies', moviesRoute);
 app.use('/likes/tvShows', tvShowsRoute);

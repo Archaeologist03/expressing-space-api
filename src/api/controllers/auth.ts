@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
 import { I_ErrorObject } from '../../interfaces/IErrors';
-import { I_UserObject } from '../../interfaces/IUser';
+import { I_User } from '../../interfaces/I_User';
 import { JWT_SECRET } from '../../utils/secrets';
 import User from '../../models/user';
 
@@ -38,7 +38,7 @@ export const signup = async (
 
     // #TODO: Make interface work with async
     // @ts-ignore
-    const addedUser: I_UserObject = await user.save();
+    const addedUser: I_User = await user.save();
 
     const token = jwt.sign(
       {
@@ -83,7 +83,7 @@ export const login = async (
   try {
     // #TODO: Make interface work with async
     // @ts-ignore
-    const user: I_UserObject = await User.findOne({ email });
+    const user: I_User = await User.findOne({ email });
 
     const isEqual = await bcrypt.compare(password, user.password);
 
