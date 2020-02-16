@@ -13,7 +13,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      # - run:
-      #     name: test
-      #     command: npm test
-# Temporary disable testing with circle until find the way to fix failing of tests.
+      - run:
+          name: test
+          command: npm test
