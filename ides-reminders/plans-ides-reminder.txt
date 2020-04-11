@@ -1,3 +1,4 @@
+USER: 
 - User is able to Add profile picture
 - User is able to write description
 - User is able to add nickname (nickname should be editable)
@@ -5,10 +6,13 @@
 
 - (Figure how to make search other users - match functionality)
 
+MESSAGES - COMMUNICATION:
 - Add Messages, place where messages are stored (figure how to connect each message with users from whom msg came from.)
 - Add Real-time conversation with socket 
 - Add letter feel conversation - user can send message that would arrive depending on time how far two users are (location).
 
-
--- FAV users
+FAV USERS:
 - User is able to add other users to list of favorites or something of that sort.
+
+LIKES & IT'S FUNCTIONALITES:
+- Ask user if they want an like(song/movie) recommendation - recco one based on their likes(either by liked artist or AI-ishly)
