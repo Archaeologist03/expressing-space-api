@@ -16,3 +16,4 @@ FAV USERS:
 
 LIKES & IT'S FUNCTIONALITES:
 - Ask user if they want an like(song/movie) recommendation - recco one based on their likes(either by liked artist or AI-ishly)
+- Refactor "song" like into "music", so users can add either song or a band.
