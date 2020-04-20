@@ -10,6 +10,8 @@
 
 > Front-End repo: https://github.com/Archaeologist03/expressing-space-client
 
+### ✨ [Demo](https://expressing-space.netlify.app/)
+
 ## Prerequisites
 
 - You need to have Typescript installed globally to run TS compiler.
