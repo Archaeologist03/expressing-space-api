@@ -1,0 +1,9 @@
+USER: 
+- User is able to Add profile picture
+- User is able to write description
+- User is able to add nickname (nickname should be editable)
+- User should be asked to add info such as (age, gender, language, country..)
+- (Figure how to make search other users - match functionality)
+
+AUTHENTICATION:
+- Sending more than just userID and token on login -> Grab that user data and send along on login.
