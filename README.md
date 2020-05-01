@@ -8,6 +8,10 @@
 
 > Express Rest API for upcoming React application. With Jest for testing and Typescript as typing system.
 
+> Front-End repo: https://github.com/Archaeologist03/expressing-space-client
+
+### ✨ [Demo](https://expressing-space.netlify.app/)
+
 ## Prerequisites
 
 - You need to have Typescript installed globally to run TS compiler.
